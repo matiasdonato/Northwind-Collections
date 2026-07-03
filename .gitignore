@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Builds
+dist/
+build/
+coverage/
+
+# Entornos (nunca versionar secretos; .env.example sí se versiona)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDEs / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Enunciado del challenge (documento de la empresa, no se publica)
+*.pdf
