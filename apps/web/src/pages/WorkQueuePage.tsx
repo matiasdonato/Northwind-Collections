@@ -88,8 +88,15 @@ export function WorkQueuePage() {
       {queue.data && queue.data.length === 0 && (
         <EmptyState
           title="🎉 Nada para gestionar con estos filtros"
-          detail="No hay clientes en mora que coincidan. Probá quitando filtros."
+          detail="No hay clientes con deuda vencida que coincidan. Los clientes al día no aparecen en esta cola."
         />
+      )}
+
+      {queue.data && queue.data.length > 0 && (
+        <p className="text-sm text-slate-500">
+          <span className="font-medium text-slate-700">{queue.data.length} cliente(s) con deuda vencida.</span>{' '}
+          Los clientes al día no aparecen en esta cola: no hay nada que gestionarles.
+        </p>
       )}
 
       {queue.data && queue.data.length > 0 && (

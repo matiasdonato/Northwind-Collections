@@ -31,6 +31,10 @@ Registro de las decisiones más importantes del proyecto: qué se decidió, por 
 
 **Por qué:** los tres flujos forman un ciclo cerrado (ver → priorizar → actuar → volver a ver) que replica el trabajo real del lunes del equipo de finanzas, pero con criterio explícito en lugar de intuición sobre una planilla. Preferimos tres flujos completos y usables a cinco a medias.
 
+**Dos ausencias deliberadas en la cola de trabajo:**
+- **Sin ordenamiento configurable.** La cola llega ordenada por prioridad (riesgo × monto) y el usuario no puede reordenarla por columnas: la tesis del producto es que el orden de trabajo lo decide el sistema con criterio explícito — darle "ordenar por monto/días/nombre" a la analista le devolvería el problema que hoy tiene con la planilla (decidir ella el orden). Para acotar la vista están los filtros por segmento, antigüedad y búsqueda, que achican el conjunto sin cambiar el criterio.
+- **Sin paginación.** La cola solo contiene clientes en mora: a la escala del enunciado son decenas de filas que se procesan de arriba hacia abajo. Se paginaría (limit/offset en el endpoint, sin tocar dominio) recién si el listado superara las centenas.
+
 **Fuera de alcance (deliberadamente, no por falta de tiempo):** ver Decisión 7.
 
 ---

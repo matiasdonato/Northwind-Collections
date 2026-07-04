@@ -245,4 +245,4 @@ Decisiones actuales que tienen camino de crecimiento conocido (ninguna requiere 
 
 1. **Score on-read → materializado**: con decenas de miles de clientes, el cálculo pasaría a una vista materializada o snapshot nocturno. La lógica de dominio pura no cambia — solo quién la invoca y cuándo.
 2. **Monolito modular → servicios**: los módulos NestJS ya tienen fronteras limpias (puertos/adaptadores); extraer `collections` a un servicio propio sería mover código, no reescribirlo.
-3. **Paginación**: la cola y los listados nacen paginados desde la API aunque el front del MVP no lo necesite con 420 clientes.
+3. **Paginación**: no existe en el MVP, deliberadamente. La cola solo contiene clientes con deuda vencida — a la escala del enunciado (420 clientes) son decenas de filas, que dos personas procesan de arriba hacia abajo; el patrón de uso es filtrar (segmento, antigüedad, búsqueda), no paginar. El cálculo en memoria es de milisegundos y el payload, de cientos de KB. Si el listado superara las centenas de filas, se agrega `limit/offset` en el endpoint y controles en el front sin tocar dominio ni casos de uso.
