@@ -37,8 +37,8 @@ npm run install:all
 cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env
 
-# 3. Levantar PostgreSQL con Docker
-docker compose up -d
+# 3. Levantar PostgreSQL (Docker), aplicar migraciones y poblar datos sintéticos
+npm run setup
 
 # 4. Levantar API + frontend juntos
 npm run dev

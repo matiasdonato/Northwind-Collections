@@ -8,7 +8,7 @@
     "dev": "concurrently -n api,web -c blue,green \"npm run start:dev --prefix apps/api\" \"npm run dev --prefix apps/web\"",
     "dev:api": "npm run start:dev --prefix apps/api",
     "dev:web": "npm run dev --prefix apps/web",
-    "db:up": "docker compose up -d",
+    "db:up": "docker compose up -d --wait",
     "db:migrate": "npm run migration:run --prefix apps/api",
     "db:seed": "npm run seed --prefix apps/api",
     "setup": "npm run db:up && npm run db:migrate && npm run db:seed",

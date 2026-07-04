@@ -35,3 +35,17 @@ Registro del uso de IA (Claude Code) durante el desarrollo: qué le pedí, dónd
 **Qué me reservé:** todas las decisiones de stack y arquitectura; a la IA le delegué la redacción y el formato, no el criterio. Cada documento lo revisé contra lo que decidimos antes de darlo por bueno.
 
 **Reflexión:** corregir a la IA en una decisión de stack y obligarla a re-fundamentar la alternativa que yo elegí produjo mejor documentación que aceptar su primera propuesta. La herramienta argumenta bien cualquier opción razonable; elegir la opción sigue siendo trabajo mío.
+
+---
+
+## Sesión 4 — Backend completo con TDD
+
+**Qué le pedí:** implementar el backend siguiendo el ciclo TDD estricto y la arquitectura definida: primero los specs del dominio en rojo (commiteados como tales), después la implementación en verde, y recién entonces subir por las capas (casos de uso → controllers/DTOs/entidades → migración → seed → e2e).
+
+**Dónde ayudó:** la velocidad de ejecución del ciclo completo manteniendo la disciplina de capas: 102 tests unitarios sobre lógica pura sin tocar la base de datos, y el dominio quedó efectivamente sin ninguna dependencia de NestJS ni TypeORM (los casos de uso se inyectan por factory para no decorar clases de aplicación).
+
+**Dónde el TDD atrapó errores de la propia IA:** dos casos concretos que documento porque son el argumento a favor del método. (1) En la tendencia de pago, la primera implementación ordenaba el historial por fecha de pago; el test de "improving" falló y expuso que debía ordenarse por ciclo de facturación (un pago puntual reciente puede ser anterior en el tiempo a un pago tardío del ciclo previo). (2) Un helper de fechas del test generaba fechas inválidas silenciosamente (NaN en el sort); el test de ordenamiento del historial lo detectó.
+
+**Qué me reservé:** la calibración del scoring y la segmentación (pesos, umbrales, la regla de que la mora temprana ≤30 días sin señales de alarma es administrativa y no "en riesgo") — son decisiones de producto, no de código. También la decisión de smoke-testear todos los endpoints a mano contra la base real antes de dar por cerrado el backend, además de los tests automáticos.
+
+**Reflexión:** commitear los specs en rojo antes que la implementación deja evidencia del proceso y obliga a especificar el comportamiento antes de escribirlo. La combinación specs-primero + revisión manual de la cola generada (verificar que los arquetipos del seed caen en el segmento esperado) me dio más confianza que cualquiera de las dos cosas por separado.

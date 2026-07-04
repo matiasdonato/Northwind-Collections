@@ -63,28 +63,32 @@ apps/api/src/
 ├── main.ts                        # Bootstrap: ValidationPipe global, Swagger
 ├── app.module.ts
 ├── modules/
-│   ├── customers/                 # Clientes: listado, detalle
-│   ├── invoices/                  # Facturas y pagos
-│   ├── collections/               # El módulo central: scoring, cola, acciones
-│   │   ├── domain/
-│   │   │   ├── risk-scoring.ts    # Score 0-100 + desglose explicable
-│   │   │   ├── segmentation.ts    # Reglas de segmento (4 arquetipos)
-│   │   │   ├── aging.ts           # Buckets 0-30/31-60/61-90/+90
-│   │   │   └── *.spec.ts          # Tests unitarios (TDD)
-│   │   ├── application/
-│   │   │   ├── get-work-queue.usecase.ts
-│   │   │   ├── register-action.usecase.ts
-│   │   │   └── ports/             # Interfaces de repositorio
-│   │   └── infrastructure/
-│   │       ├── collections.controller.ts
-│   │       ├── dto/               # class-validator
-│   │       ├── entities/          # Entidades TypeORM (@Entity)
-│   │       └── typeorm-*.repository.ts
-│   └── dashboard/                 # KPIs y aging agregados
+│   └── collections/               # Módulo único: todo el dominio de cobranza
+│       ├── domain/                # Lógica pura + specs TDD colocalizados
+│       │   ├── types.ts           # Vocabulario del negocio
+│       │   ├── aging.ts           # Buckets 0-30/31-60/61-90/+90, saldos
+│       │   ├── payments.ts        # Aplicación de pagos (parcial/total)
+│       │   ├── promises.ts        # Ciclo de vida de promesas de pago
+│       │   ├── payment-behavior.ts# Tendencia y consistencia de pago
+│       │   ├── segmentation.ts    # Reglas de segmento (4 arquetipos)
+│       │   ├── risk-scoring.ts    # Score 0-100 + desglose explicable
+│       │   ├── priority.ts        # score × monto, amortiguado por promesa
+│       │   ├── kpis.ts            # % mora, DSO, promesas activas
+│       │   └── customer-status.ts # Evaluación integral de un cliente
+│       ├── application/           # Casos de uso (clases puras, sin Nest)
+│       │   ├── ports/             # CollectionsRepository (interfaz)
+│       │   ├── testing/           # Repositorio en memoria para specs
+│       │   └── *.usecase.ts       # dashboard, work-queue, detail, action, payment
+│       └── infrastructure/        # Frontera HTTP + persistencia
+│           ├── entities/          # Entidades TypeORM (@Entity)
+│           ├── dto/               # class-validator + Swagger
+│           ├── *.controller.ts    # dashboard, work-queue, customers, invoices
+│           ├── domain-exception.filter.ts
+│           └── typeorm-collections.repository.ts
 └── database/
-    ├── data-source.ts             # Configuración TypeORM
+    ├── data-source.ts             # Configuración TypeORM (CLI)
     ├── migrations/                # Migraciones versionadas
-    └── seed.ts                    # Datos sintéticos
+    └── seed.ts                    # Datos sintéticos (arquetipos)
 ```
 
 ### 2.3 API REST
