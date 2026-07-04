@@ -138,7 +138,7 @@ created_at
 Notas:
 - `invoices.status` sí se persiste (es un hecho transaccional que cambia con pagos), pero se actualiza **dentro de la misma transacción** que crea el pago — nunca puede divergir.
 - Los montos son `decimal`, nunca `float` (dinero).
-- El diagrama visual se mantiene en dbdiagram.io (formato DBML versionado en `docs/data-model.dbml`) y se exporta a `docs/data-model.png` (requisito del challenge).
+- El diagrama del modelo vive en `docs/`: el fuente DBML (`data-model.dbml`, editable en dbdiagram.io) y su render (`data-model.svg`, generado con `dbml-renderer`).
 
 ### 2.5 Motor de scoring (especificación de dominio)
 

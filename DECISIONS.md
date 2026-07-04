@@ -81,6 +81,14 @@ Registro de las decisiones más importantes del proyecto: qué se decidió, por 
 **Decisión:** ver el detalle completo en [ARCHITECTURE.md](ARCHITECTURE.md). Lo esencial:
 
 - **NestJS** (opción válida del enunciado) con una separación pragmática de clean architecture: la lógica de negocio (scoring, aging, segmentación) vive en una capa de dominio pura, sin dependencias de framework ni base de datos, desarrollada con TDD.
+
+**Por qué clean architecture (y en qué dosis):**
+
+1. **El valor de este sistema está en sus reglas de negocio** — el motor de priorización — no en sus pantallas ni en su API. La arquitectura pone exactamente eso en el centro, sin dependencias: el código más valioso no puede romperse porque cambie el framework, el ORM o la forma de la API. En un CRUD puro esto sería sobre-ingeniería; aquí el centro tiene contenido real que justifica protegerlo.
+2. **Habilitó el TDD de verdad**: como el dominio es puro, sus ~100 tests corren en menos de un segundo sin base de datos ni mocks. Sin la separación, testear "¿este cliente es zombi?" requeriría infraestructura. La arquitectura y el TDD no fueron dos decisiones: una hizo posible a la otra.
+3. **Lo más probable de cambiar es lo más barato de cambiar**: los pesos del score y los umbrales de segmentación son supuestos a calibrar con la analista de cobranza; viven en un archivo puro con sus tests al lado, y ajustarlos no toca HTTP ni persistencia.
+4. **El beneficio ya se cobró durante el propio desarrollo**: el cambio de ORM en fase de diseño (Prisma → TypeORM) costó una línea del módulo y la capa de infraestructura; dominio y casos de uso quedaron intactos.
+5. **En dosis pragmática**: sin value objects para todo, sin mappers en cada frontera, sin CQRS. La inversión de dependencias se aplicó únicamente donde compra algo medible (testabilidad del dominio, reemplazabilidad del ORM). La decisión no fue "clean architecture sí o no", sino cuánta.
 - **PostgreSQL** (requisito) con **TypeORM** como ORM: es el ORM con integración oficial en NestJS (`@nestjs/typeorm`), con entidades tipadas y migraciones versionadas. Las entidades viven en la capa de infraestructura, manteniendo el dominio libre de dependencias.
 - **React + Vite** como SPA. Sin Next.js: es una herramienta interna detrás de login, no necesita SSR ni SEO; una SPA simple reduce conceptos y superficie de error. **TanStack Query** para el estado del servidor, que resuelve de forma idiomática los estados de carga y error visibles (requisito explícito).
 - **Monorepo** (`apps/api` + `apps/web`) con **Docker Compose** para Postgres y seed automático de datos sintéticos: una persona que clona el repo levanta todo con un comando en menos de 10 minutos.

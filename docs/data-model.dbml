@@ -1,0 +1,54 @@
+// Modelo de datos — Northwind Collections
+// Principio: se persisten HECHOS (clientes, facturas, pagos, gestiones).
+// Los JUICIOS (score, segmento, aging) se derivan al leer y no se almacenan
+// (ver DECISIONS.md, Decisión 5).
+// Editable en https://dbdiagram.io — pegar este archivo.
+
+Table customers {
+  id uuid [pk, default: `gen_random_uuid()`]
+  name varchar [not null]
+  size varchar(20) [not null, note: 'small | mid | enterprise']
+  mrr "numeric(12,2)" [not null, note: 'Facturación mensual recurrente, USD']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table invoices {
+  id uuid [pk, default: `gen_random_uuid()`]
+  customer_id uuid [not null, ref: > customers.id, note: 'ON DELETE CASCADE']
+  amount "numeric(12,2)" [not null]
+  issued_date date [not null]
+  due_date date [not null]
+  status varchar(20) [not null, default: 'open', note: 'open | partially_paid | paid | void — se actualiza en la MISMA transacción que el pago']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    customer_id
+  }
+}
+
+Table payments {
+  id uuid [pk, default: `gen_random_uuid()`]
+  invoice_id uuid [not null, ref: > invoices.id, note: 'ON DELETE CASCADE']
+  amount "numeric(12,2)" [not null]
+  paid_at date [not null]
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    invoice_id
+  }
+}
+
+Table collection_actions {
+  id uuid [pk, default: `gen_random_uuid()`]
+  customer_id uuid [not null, ref: > customers.id, note: 'ON DELETE CASCADE']
+  invoice_id uuid [ref: > invoices.id, note: 'Opcional: la gestión puede ser a nivel cliente. ON DELETE SET NULL']
+  type varchar(30) [not null, note: 'call | email | note | payment_promise']
+  notes text
+  promised_date date [note: 'Solo promesas de pago']
+  promise_status varchar(20) [note: 'pending | kept — "broken" se deriva del paso del tiempo al leer']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    customer_id
+  }
+}

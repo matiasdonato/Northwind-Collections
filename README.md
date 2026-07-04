@@ -50,6 +50,28 @@ npm run dev
 | API | http://localhost:3000/api/health |
 | Swagger (docs de la API) | http://localhost:3000/api/docs |
 
+## Cómo probar el flujo principal
+
+El flujo end-to-end replica el lunes del equipo de cobranza (5 minutos):
+
+1. Abrí **http://localhost:5173** → el **Dashboard** muestra la salud de la cartera: % de mora, monto vencido, aging por antigüedad y composición por segmento.
+2. Clickeá el tramo **61-90 días** del aging (o el botón "Cola de trabajo") → la **cola priorizada**: clientes en mora ordenados por riesgo × monto, cada uno con su segmento y una acción sugerida.
+3. Entrá a **Nimbus Software** (tiene 2 promesas de pago incumplidas) → el detalle muestra sus facturas, el historial de gestiones y el score con su desglose (botón *"¿Por qué este score?"*).
+4. Registrá una gestión: tipo **Promesa de pago**, con una fecha futura → aparece en el historial como *Vigente* y el cliente baja de prioridad en la cola.
+5. En la factura más vieja, clickeá **Registrar pago** (el monto viene precargado con el saldo) → la factura pasa a *Pagada*, el score baja al instante y la promesa queda *Cumplida*.
+6. Volvé al Dashboard → el % de mora y el aging se movieron. Los datos quedaron persistidos: reiniciá la app (`Ctrl+C` y `npm run dev`) y siguen ahí.
+
+Para volver los datos de demo al estado inicial: `npm run db:seed`.
+
+### Verificación automática
+
+```bash
+npm test          # 102 tests unitarios (dominio + casos de uso), corre sin DB
+npm run test:e2e  # 5 tests end-to-end contra Postgres (requiere la DB levantada)
+```
+
+La documentación de la API está en **http://localhost:3000/api/docs** (Swagger) y el diagrama del modelo de datos en [docs/data-model.svg](docs/data-model.svg).
+
 ### Consideraciones sobre la base de datos
 
 - **Docker Compose levanta únicamente PostgreSQL**; la API y el frontend corren con Node local (mejor experiencia de desarrollo: hot reload y debugging sin fricción de volúmenes).
