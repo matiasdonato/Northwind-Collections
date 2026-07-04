@@ -1,32 +1,25 @@
-# React + TypeScript + Vite
+# Web — Northwind Collections
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Frontend en React + Vite. Consume la API del backend (`apps/api`); para la visión general del proyecto y las instrucciones completas de instalación, ver el [README de la raíz](../../README.md).
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 20+
+- La API levantada en `http://localhost:3000` (ver README de la raíz)
+- Archivo `.env` (copiar de `.env.example`)
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm run dev       # Levanta el frontend en http://localhost:5173
+npm run build     # Compila a dist/
+npm run preview   # Sirve el build de producción localmente
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Stack
+
+- **TanStack Query** para el estado del servidor (cache, revalidación y estados de carga/error).
+- **React Router** para la navegación entre las tres vistas (dashboard, cola de trabajo, detalle de cliente).
+- **Tailwind CSS** para estilos.
+
+El comportamiento esperado de cada pantalla está especificado en [FUNCTIONAL.md](../../FUNCTIONAL.md).

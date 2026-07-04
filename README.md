@@ -17,7 +17,45 @@ Herramienta interna para el equipo de finanzas de Northwind (SaaS B2B): visibili
 
 - **Backend:** NestJS + TypeORM + PostgreSQL
 - **Frontend:** React + Vite + TanStack Query
-- **Infra local:** Docker Compose
+- **Infra local:** Docker Compose (solo para la base de datos)
+
+## Cómo levantar el proyecto
+
+### Requisitos
+
+- Node.js 20 o superior
+- Docker (con Docker Compose)
+
+### Pasos
+
+```bash
+# 1. Instalar dependencias (raíz + api + web)
+npm run install:all
+
+# 2. Configurar variables de entorno
+#    (los valores por defecto funcionan para desarrollo local, no hace falta editarlos)
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+
+# 3. Levantar PostgreSQL con Docker
+docker compose up -d
+
+# 4. Levantar API + frontend juntos
+npm run dev
+```
+
+| Servicio | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| API | http://localhost:3000/api/health |
+| Swagger (docs de la API) | http://localhost:3000/api/docs |
+
+### Consideraciones sobre la base de datos
+
+- **Docker Compose levanta únicamente PostgreSQL**; la API y el frontend corren con Node local (mejor experiencia de desarrollo: hot reload y debugging sin fricción de volúmenes).
+- Los datos **persisten entre reinicios** en el volumen `postgres_data`. Para empezar de cero: `docker compose down -v` y volver a levantar.
+- Si ya tenés un Postgres propio ocupando el puerto 5432, cambiá `DATABASE_PORT` en `apps/api/.env` y volvé a levantar el compose — no hace falta tocar código.
+- Docker Desktop debe estar corriendo antes del paso 3. Si la API loguea un error de conexión al arrancar, Postgres todavía estaba inicializándose: esperá unos segundos y reintentá.
 
 ## El producto en una frase
 
