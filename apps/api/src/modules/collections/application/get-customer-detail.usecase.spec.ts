@@ -20,14 +20,14 @@ const snapshot: CustomerSnapshot = {
       type: 'payment_promise',
       promisedDate: d('2026-06-20'),
       promiseStatus: 'pending',
-      createdAt: d('2026-06-10T10:00:00Z'),
+      createdAt: new Date('2026-06-10T10:00:00Z'),
     },
     {
       id: 'llamada',
       customerId: 'c1',
       type: 'call',
       notes: 'No contesta',
-      createdAt: d('2026-06-25T15:00:00Z'),
+      createdAt: new Date('2026-06-25T15:00:00Z'),
     },
   ],
 };
