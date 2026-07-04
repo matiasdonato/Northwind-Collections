@@ -23,3 +23,6 @@ Thumbs.db
 
 # Enunciado del challenge (documento de la empresa, no se publica)
 *.pdf
+
+# Configuración local del harness de desarrollo
+.claude/
