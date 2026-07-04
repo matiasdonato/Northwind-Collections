@@ -2,8 +2,6 @@
 
 Herramienta interna para el equipo de finanzas de Northwind (SaaS B2B): visibilidad de la cartera, priorización de clientes en mora y registro de gestiones de cobranza. Reemplaza la planilla manual de los lunes por una cola de trabajo priorizada con criterio explícito.
 
-> 🚧 **En desarrollo.** Este README se completará con instrucciones de instalación y uso a medida que avance la implementación.
-
 ## Documentación
 
 | Documento | Contenido |
@@ -37,12 +35,24 @@ npm run install:all
 cp apps/api/.env.example apps/api/.env
 cp apps/web/.env.example apps/web/.env
 
-# 3. Levantar PostgreSQL (Docker), aplicar migraciones y poblar datos sintéticos
+# 3. Levantar la base de datos y prepararla (ver detalle abajo)
 npm run setup
 
 # 4. Levantar API + frontend juntos
 npm run dev
 ```
+
+### ¿Qué hace `npm run setup`?
+
+Es un atajo que ejecuta estos tres pasos; podés correrlos por separado si preferís:
+
+```bash
+docker compose up -d --wait                    # 3a. Levanta PostgreSQL 16 en Docker (espera a que esté healthy)
+npm run migration:run --prefix apps/api        # 3b. Crea las tablas (migraciones TypeORM)
+npm run seed --prefix apps/api                 # 3c. Puebla datos sintéticos (17 clientes con los arquetipos del negocio)
+```
+
+La conexión usa los valores del `.env` de la API, que coinciden con los del `docker-compose.yml` — por eso funciona sin configurar nada.
 
 | Servicio | URL |
 |---|---|
