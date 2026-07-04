@@ -49,3 +49,15 @@ Registro del uso de IA (Claude Code) durante el desarrollo: qué le pedí, dónd
 **Qué me reservé:** la calibración del scoring y la segmentación (pesos, umbrales, la regla de que la mora temprana ≤30 días sin señales de alarma es administrativa y no "en riesgo") — son decisiones de producto, no de código. También la decisión de smoke-testear todos los endpoints a mano contra la base real antes de dar por cerrado el backend, además de los tests automáticos.
 
 **Reflexión:** commitear los specs en rojo antes que la implementación deja evidencia del proceso y obliga a especificar el comportamiento antes de escribirlo. La combinación specs-primero + revisión manual de la cola generada (verificar que los arquetipos del seed caen en el segmento esperado) me dio más confianza que cualquiera de las dos cosas por separado.
+
+---
+
+## Sesión 5 — Frontend
+
+**Qué le pedí:** las tres pantallas de FUNCTIONAL.md consumiendo la API real: cliente HTTP tipado, hooks de TanStack Query, y las vistas con sus estados de carga/error/vacío.
+
+**Dónde ayudó:** velocidad pura en la capa de presentación — tipos espejo de la API, formularios con feedback, y el patrón de invalidación ("toda escritura invalida todas las queries", justificado porque las tres vistas derivan de los mismos datos y el volumen es chico).
+
+**Qué verifiqué yo:** el flujo completo en el navegador antes de commitear: registrar un pago desde la UI y ver la factura pasar a Pagada y el score bajar de 66 a 44 en vivo, sin errores de consola. La consigna pide "manejo visible de estados de carga y error"; eso no se verifica leyendo el código sino usándolo.
+
+**Reflexión:** en el frontend delegué más que en el dominio (acá los errores se ven; en el motor de scoring un error silencioso prioriza mal durante semanas). El criterio de cuánto delegar según el costo de equivocarse en cada capa fue la decisión de uso de IA más importante del proyecto.
